@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 //Getting One
 router.get("/:id", getSubscriber, (req, res) => {
-  res.send(res.subscriber);
+  res.json(res.subscriber);
 });
 //Creating One
 router.post("/", async (req, res) => {
@@ -31,7 +31,14 @@ router.post("/", async (req, res) => {
 //Updating One
 router.patch("/:id", getSubscriber, (req, res) => {});
 //Deleting One
-router.delete("/:id", getSubscriber, (req, res) => {});
+router.delete("/:id", getSubscriber, async (req, res) => {
+    try{
+        await res.subscriber.remove();
+        res.json({message: "Deleted subscriber!"});
+    }catch(error){
+        res.status(500).json({ message: error.message });
+    }
+});
 
 async function getSubscriber(req, res, next){
     let subscriber;
